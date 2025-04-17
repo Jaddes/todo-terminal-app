@@ -21,3 +21,13 @@ It allows users to create, view, complete, and delete tasks, with persistent sto
 
 1. Make sure you have Python 3 installed.
 2. Clone this repository:
+   git clone https://github.com/yourusername/terminal-todo-manager.git
+3. Navigate to the project directory:
+4. Run the app:
+   python todo.py
+
+## Future Improvements
+
+- Add due dates and priorities for tasks
+- Improve user interface
+- Add search and filter options

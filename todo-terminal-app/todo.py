@@ -6,6 +6,28 @@
 # Attributes: title, completed (bool)
 # Methods: mark as completed
 # -----------------------
+class Task:
+    """
+    Represents a single task in the to-do list
+    """
+    
+    def __init__(self, title):
+        """
+        Initialize a new task with a title.
+        By default task is not completed.
+        """
+        self.title = title
+        self.completed = False
+    
+    def mark_completed(self):
+        """
+        Mark the task completed.
+        """
+        self.completed = True
+        
+    def __str__(self):
+        status = "[X]" if self.completed else "[ ]"
+        return f"{status} {self.title}"
 
 # -----------------------
 # ToDoList class

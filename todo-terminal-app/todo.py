@@ -13,6 +13,10 @@
 # Technologies: Python 3
 
 # One task for each task in to-do list
+
+from typing import List
+import json
+
 class Task:
     """
     Represents one task in the to-do list
@@ -53,18 +57,50 @@ def __str__(self):
         status = "[X]" if self.completed else "[ ]"
         return f"{status} {self.title}"
 
-# -----------------------
-# ToDoList class
-# Stores list of Task objects
-# Methods:
-# - add_task(title)
-# - list_tasks()
-# - mark_task_completed(task_id)
-# - delete_task(task_id)
-# - save_to_file(filename)
-# - load_from_file(filename)
-# -----------------------
 
+class ToDoList:
+    """
+    Represents a collection of tasks managed by ToDoList.
+    
+    Attributes:
+        title (List[Task]): A list holdin Task objects.
+    """
+    
+    def __init__(self):
+        """Initialization of an empty to-do list."""
+        self.tasks: List[Task] = []
+            # We could write it like 'self.tasks = []'
+            # Like this now any new user viewing this code knows that this list is labeled for "Tasks" 
+
+    def add_task(self, title: str) -> None:
+        """ 
+        Add a new task with the given title. 
+        
+        Args:
+            title (str): The title or description of the task.
+
+        Example:
+            new_todolist = ToDoList()
+            new_todolist.add_task("Finish the project")
+        """
+        self.tasks.append(Task(title))
+        # We could have written it like:
+        #   def add_task(self, title):
+        #       self.tasks.append(Task(title))
+        # But adding "title: str" and "-> None" makes it more easier to understand and test by the new users
+
+    def list_tasks(self) -> None:
+        """
+        Print all tasks with their status.
+        
+        Example:
+            new_todolist = ToDoList()
+            new_todolist.list_tasks()
+        """
+        if not self.tasks:
+            print("No tasks found.")
+            return
+        
 # -----------------------
 # CLI Menu
 # Display choices to the user:
@@ -82,3 +118,4 @@ def __str__(self):
 # Runs CLI loop
 # Saves tasks on exit
 # -----------------------
+

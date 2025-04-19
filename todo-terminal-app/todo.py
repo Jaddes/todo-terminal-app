@@ -182,21 +182,58 @@ class ToDoList:
             print(f"File '{filename}' not found. Starting with an empty to-do list.")
         
             
-# -----------------------
-# CLI Menu
-# Display choices to the user:
-# 1. Add a task
-# 2. List all tasks
-# 3. Mark a task as completed
-# 4. Delete a task
-# 5. Save and exit
-# -----------------------
 
-# -----------------------
-# Main function
-# Application entry point
-# Loads tasks from file
-# Runs CLI loop
-# Saves tasks on exit
-# -----------------------
 
+def main():
+    todo_list = ToDoList()
+    filename = "tasks.json"
+
+    while True:
+        print("\n===== TO-DO LIST MENU =====")
+        print("1. Add a task")
+        print("2. List all tasks")
+        print("3. Mark a task as completed")
+        print("4. Delete a task")
+        print("5. Save and Exit")
+        print("6. Load tasks from a file")  
+
+
+        choice = input("Enter your choice (1-5): ")
+
+        if choice == "1":
+            title = input("Enter the task title: ")
+            todo_list.add_task(title)
+
+        elif choice == "2":
+            todo_list.list_tasks()
+
+        elif choice == "3":
+            try:
+                task_id = int(input("Enter the task number to mark as completed: "))
+                todo_list.mark_task_completed(task_id)
+            except ValueError:
+                print("Please enter a valid number.")
+
+        elif choice == "4":
+            try:
+                task_id = int(input("Enter the task number to delete: "))
+                todo_list.delete_task(task_id)
+            except ValueError:
+                print("Please enter a valid number.")
+
+        elif choice == "5":
+            todo_list.save_to_file(filename)
+            print("Tasks saved successfully! Goodbye 👋")
+            break
+        
+        elif choice == "6":
+            filename = input("Enter the filename to load tasks from: ")
+            todo_list.load_from_file(filename)
+            print(f"Tasks loaded from '{filename}' successfully!")
+
+        else:
+            print("Invalid choice. Please enter a number between 1 and 6.")
+            
+
+if __name__ == "__main__":
+    main()

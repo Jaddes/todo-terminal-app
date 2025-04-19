@@ -97,10 +97,91 @@ class ToDoList:
             new_todolist = ToDoList()
             new_todolist.list_tasks()
         """
+        
         if not self.tasks:
-            print("No tasks found.")
+        # Check if the list is empty
+            print("No tasks found.") 
             return
         
+        for idx, task in enumerate(self.tasks, start=1):
+            # enumerate counts and go trough the giving list making counting a lot easier
+            # so there is the idx which is just declared
+            # enumerate just affects the print not the list
+            status = "✅" if task.completed else "❌"
+            print(f"{idx}. [{status} {task.title}]")
+            
+    def mark_task_completed(self, task_id: int) -> None:
+        """
+        Mark the task with the given ID as completed.
+        
+        Agrs:
+            task_id(int): The given id that is to be marked as finshed
+            
+        Example:
+            new_todolist = ToDoList()
+            new_todolist.mark_task_completed(2)
+        """
+        if 1 <= task_id <= len(self.tasks):
+            self.tasks[task_id - 1].completed = True
+        else:
+            print("Invalid task ID")
+            
+    def delete_task(self, task_id: int) -> None:
+        """
+        Delete the task with the given ID.
+        
+        Args:
+            task_id(int): The given id that is marked for delete
+            
+        Example:
+            new_todolist = ToDoList()
+            new_todolist.delete_task(2)
+        """ 
+        if 1 <= task_id <= len(self.tasks):
+            del self.tasks[task_id - 1]
+        else:
+            print("Invalid task ID")
+    
+    def save_to_file(self, filename: str) -> None:
+        """
+        Save tasks to a file in JSON format
+
+        Args:
+            filename (str): name of a file where we want to save the file
+            
+        Example:
+            new_todolist = ToDoList()
+            new_todolist.save_to_file("Project.json") 
+        """
+        data = [{"title": task.title, "completed": task.completed} for task in self.tasks]
+        # list comprehension is more easier to make then using basic for + append or even map()
+        with open(filename, 'w') as f:
+            json.dump(data, f, indent=4)
+            # indent used for dictonary to be pretty
+            
+    def load_from_file(self, filename: str) -> None:
+        """
+        Load tasks from a file
+        
+        Args:
+            filename(str): name of a file where we want to load from
+            
+        Example:
+            new_todolist = ToDoList()
+            new_todolist.load_from_file("Project.json") 
+        """
+        try:
+            with open(filename, "r") as f:
+                data = json.load(f)
+                self.tasks = [Task(item["title"]) for item in data]
+                # make list based on first word inside the dictionary
+                for task, item in zip(self.tasks, data):
+                    task.completed = item.get("completed", False)
+                    # default version supposed to set on False and if not empty he just gonna write what in the dictionary                    
+        except FileNotFoundError:
+            print(f"File '{filename}' not found. Starting with an empty to-do list.")
+        
+            
 # -----------------------
 # CLI Menu
 # Display choices to the user:

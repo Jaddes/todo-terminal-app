@@ -2,5 +2,9 @@
     {
         "title": "Making Money",
         "completed": true
+    },
+    {
+        "title": "test",
+        "completed": false
     }
 ]

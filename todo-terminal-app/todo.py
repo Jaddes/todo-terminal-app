@@ -16,6 +16,7 @@
 
 from typing import List
 import json
+import os
 
 class Task:
     """
@@ -180,13 +181,70 @@ class ToDoList:
                     # default version supposed to set on False and if not empty he just gonna write what in the dictionary                    
         except FileNotFoundError:
             print(f"File '{filename}' not found. Starting with an empty to-do list.")
-        
             
+    def merge_and_save_to_file(self, filename: str) -> None:
+        """
+        Merge existing tasks in the to-do list with current tasks and save it all together.
+
+        Args:
+            filename (str): The to-do list to save the merged tasks into.
+        """
+        try:
+            with open(filename, "r") as f:
+                old_data = json.load(f)
+        except FileNotFoundError:
+            old_data = []
+            
+        # We create Task objects from old to-do list
+        old_tasks = [Task(item["title"]) for item in old_data]
+        for task, item in zip(old_tasks, old_data):
+            task.completed = item.get("completed", False)
+            
+        # Merge old tasks with new ones
+        merged_tasks = old_tasks + self.tasks
+        
+        # Prepare data for saving
+        data = [{"title": task.title, "completed": task.completed} for task in merged_tasks]
+        
+        # Save merged tasks back to file
+        with open(filename, "w") as f:
+            json.dump(data, f, indent = 4)
+        
+def choose_file():
+    """
+    Shows the list of all list of tasks
+
+    Returns:
+        : _description_
+    """
+    folder = "projects"
+    files = [f for f in os.listdir(folder) if f.endswith(".json")]
+    
+    if not files:
+        print("No to-do list files found.")
+        return None
+    
+    print("\nAvailable To-Do Lists:")
+    for idx, filename in enumerate(files, start=1):
+        print(f"{idx}. {filename}")
+        
+    try:
+        choice = int(input("Choose a file by number: "))
+        if 1 <= choice <= len(files):
+            return os.path.join(folder, files[choice - 1])
+        else:
+            print("Invalid choice.")
+            return None
+    except ValueError:
+        print("Please enter a valid number.")
+        return None     
+    
+   
 
 
 def main():
     todo_list = ToDoList()
-    filename = "tasks.json"
+    filename = None
 
     while True:
         print("\n===== TO-DO LIST MENU =====")
@@ -222,14 +280,50 @@ def main():
                 print("Please enter a valid number.")
 
         elif choice == "5":
-            todo_list.save_to_file(filename)
-            print("Tasks saved successfully! Goodbye 👋")
-            break
+            if filename is None:
+                print("You're to-do tasked are not saved on any to-do list what do you want to do?\n")
+                
+                print("\nSave Options:")
+                print("1. Save to an existing to-do list")
+                print("2. Save as a new list to-do list")
+                
+                save_choice = input("Enter your choice (1-2): ")
+                
+                if save_choice == "1":
+                    # Let user choose an existing file
+                    selected_file = choose_file()
+                    if selected_file:
+                        todo_list.merge_and_save_to_file(selected_file)
+                        filename = selected_file  # Update filename after saving
+                        print(f"Tasks save to '{selected_file}' successfully! A Goodbye 👋")
+                        break
+                    else:
+                        print("No file selected. Return to menu.")
+                        
+                    
+                elif save_choice == "2":
+                    new_name = input("Enter new project name (without .json) ").strip()
+                    if not new_name.endswith(".json"):
+                        new_name += ".json"
+                    new_path = os.path.join("projects", new_name)
+                    todo_list.save_to_file(new_path)
+                    print(f"Tasks saved as new project '{new_path}' successfully! Goodbye 👋")
+                    break
+            else:
+                # filename is already set by 6 choice
+                todo_list.save_to_file(filename)
+                print(f"Tasks saved to '{filename}' successfully! Goodbye 👋")
+                break
+            
         
         elif choice == "6":
-            filename = input("Enter the filename to load tasks from: ")
-            todo_list.load_from_file(filename)
-            print(f"Tasks loaded from '{filename}' successfully!")
+            selected_file = choose_file()
+            if selected_file:
+                todo_list.load_from_file(selected_file)
+                print(f"Tasks loaded from '{selected_file}' successfully!")
+                filename = selected_file
+            else:
+                print("No file selected. Returning to menu.")
 
         else:
             print("Invalid choice. Please enter a number between 1 and 6.")

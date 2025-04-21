@@ -84,12 +84,12 @@ class ToDoList:
             new_todolist = ToDoList()
             new_todolist.add_task("Finish the project")
         """
-        self.tasks.append(Task(title))
         # We could have written it like:
         #   def add_task(self, title):
         #       self.tasks.append(Task(title))
         # But adding "title: str" and "-> None" makes it more easier to understand and test by the new users
-
+        self.tasks.append(Task(title))
+    
     def list_tasks(self) -> None:
         """
         Print all tasks with their status.
@@ -124,6 +124,8 @@ class ToDoList:
         """
         if 1 <= task_id <= len(self.tasks):
             self.tasks[task_id - 1].completed = True
+            # Example easier to undersand:
+            # We want task 1. In listed function with enumerate its in the position 1. We write 1 and the position [0] where its our first to-do task
         else:
             print("Invalid task ID")
             
@@ -155,10 +157,11 @@ class ToDoList:
             new_todolist.save_to_file("Project.json") 
         """
         data = [{"title": task.title, "completed": task.completed} for task in self.tasks]
-        # list comprehension is more easier to make then using basic for + append or even map()
+        # List comprehension is more easier to make then using basic for + append or even map()
+        # So we make here a dictionary from the tasks we are implementing 
         with open(filename, 'w') as f:
             json.dump(data, f, indent=4)
-            # indent used for dictonary to be pretty
+            # indent used for dictonary to make enough space to see clearly and to be more orginized for human eye
             
     def load_from_file(self, filename: str) -> None:
         """
@@ -175,10 +178,12 @@ class ToDoList:
             with open(filename, "r") as f:
                 data = json.load(f)
                 self.tasks = [Task(item["title"]) for item in data]
-                # make list based on first word inside the dictionary
+                # Make list based on first word inside the dictionary 
+                # We are implementing just the value from 'title'
                 for task, item in zip(self.tasks, data):
                     task.completed = item.get("completed", False)
-                    # default version supposed to set on False and if not empty he just gonna write what in the dictionary                    
+                    # We need to add the second part which is completed value so that's why we using for loop
+                    # Default version supposed to set on False and if not empty he just gonna write what in the dictionary                    
         except FileNotFoundError:
             print(f"File '{filename}' not found. Starting with an empty to-do list.")
             
@@ -194,9 +199,10 @@ class ToDoList:
                 old_data = json.load(f)
         except FileNotFoundError:
             old_data = []
+        # First we are making dictionary from the loaded json file
             
-        # We create Task objects from old to-do list
         old_tasks = [Task(item["title"]) for item in old_data]
+        # Like from the previous command now we are making the list just from the title parts
         for task, item in zip(old_tasks, old_data):
             task.completed = item.get("completed", False)
             
@@ -212,13 +218,12 @@ class ToDoList:
         
 def choose_file():
     """
-    Shows the list of all list of tasks
+    Shows the list of all list of tasks from
 
-    Returns:
-        : _description_
     """
     folder = "projects"
     files = [f for f in os.listdir(folder) if f.endswith(".json")]
+    # We choose and open the folder premade projects and only made a list made of .json files
     
     if not files:
         print("No to-do list files found.")

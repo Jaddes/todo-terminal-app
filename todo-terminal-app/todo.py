@@ -47,7 +47,7 @@ class Task:
             task.mark_completed()
         """
         self.completed = True
-def __str__(self):
+    def __str__(self):
         """
         Return a string representation of the task.
         Shows [X] if completed, [ ] if not.
@@ -64,7 +64,7 @@ class ToDoList:
     Represents a collection of tasks managed by ToDoList.
     
     Attributes:
-        title (List[Task]): A list holdin Task objects.
+        title (List[Task]): A list holding Task objects.
     """
     
     def __init__(self):
@@ -115,8 +115,8 @@ class ToDoList:
         """
         Mark the task with the given ID as completed.
         
-        Agrs:
-            task_id(int): The given id that is to be marked as finshed
+        Args:
+            task_id(int): The given id that is to be marked as finished
             
         Example:
             new_todolist = ToDoList()
@@ -124,7 +124,7 @@ class ToDoList:
         """
         if 1 <= task_id <= len(self.tasks):
             self.tasks[task_id - 1].completed = True
-            # Example easier to undersand:
+            # Example easier to understand:
             # We want task 1. In listed function with enumerate its in the position 1. We write 1 and the position [0] where its our first to-do task
         else:
             print("Invalid task ID")
@@ -161,7 +161,7 @@ class ToDoList:
         # So we make here a dictionary from the tasks we are implementing 
         with open(filename, 'w') as f:
             json.dump(data, f, indent=4)
-            # indent used for dictonary to make enough space to see clearly and to be more orginized for human eye
+            # indent used for dictionary to make enough space to see clearly and to be more organized for human eye
             
     def load_from_file(self, filename: str) -> None:
         """
@@ -182,7 +182,7 @@ class ToDoList:
                 # We are implementing just the value from 'title'
                 for task, item in zip(self.tasks, data):
                     task.completed = item.get("completed", False)
-                    # We need to add the second part which is completed value so that's why we using for loop
+                    # We need to add the second part which is completed value so that's why we are using for loop
                     # Default version supposed to set on False and if not empty he just gonna write what in the dictionary                    
         except FileNotFoundError:
             print(f"File '{filename}' not found. Starting with an empty to-do list.")
@@ -218,7 +218,7 @@ class ToDoList:
         
 def choose_file():
     """
-    Shows the list of all list of tasks from
+    Shows the list of all available to-do lists.
 
     """
     folder = "projects"
@@ -261,7 +261,7 @@ def main():
         print("6. Load tasks from a file")  
 
 
-        choice = input("Enter your choice (1-5): ")
+        choice = input("Enter your choice (1-6): ")
 
         if choice == "1":
             title = input("Enter the task title: ")
@@ -286,11 +286,11 @@ def main():
 
         elif choice == "5":
             if filename is None:
-                print("You're to-do tasked are not saved on any to-do list what do you want to do?\n")
+                print("You're to-do tasks are not saved on any to-do list what do you want to do?\n")
                 
                 print("\nSave Options:")
                 print("1. Save to an existing to-do list")
-                print("2. Save as a new list to-do list")
+                print("2. Save as a new to-do list")
                 
                 save_choice = input("Enter your choice (1-2): ")
                 
@@ -300,10 +300,10 @@ def main():
                     if selected_file:
                         todo_list.merge_and_save_to_file(selected_file)
                         filename = selected_file  # Update filename after saving
-                        print(f"Tasks save to '{selected_file}' successfully! A Goodbye 👋")
+                        print(f"Tasks saved to '{selected_file}' successfully! A Goodbye 👋")
                         break
                     else:
-                        print("No file selected. Return to menu.")
+                        print("No file selected. Returning to menu.")
                         
                     
                 elif save_choice == "2":

@@ -5,6 +5,10 @@
     },
     {
         "title": "Get Knowladge",
+        "completed": true
+    },
+    {
+        "title": "Apply the knowladge ",
         "completed": false
     }
 ]

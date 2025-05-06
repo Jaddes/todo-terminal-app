@@ -1,4 +1,4 @@
-# todo.py - Simple terminal To-Do list application
+# todo.py - To-Do list application
 # This project demonstrates the applications of Python fundamentals such as:
 #   - Object-Oriented Programming (OOP)
 #   - File input/output (saving and loading tasks)
@@ -9,14 +9,13 @@
 #   - As proof of understanding of basic Python programming skills
 #
 
-# Complexity: Easy
 # Technologies: Python 3
 
 # One task for each task in to-do list
 
-from typing import List
-import json
-import os
+from typing import List # For type hinting the task list
+import json # For saving/loading data in JSON format
+import os # For interacting with the file system
 
 class Task:
     """
